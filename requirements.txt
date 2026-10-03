@@ -1,0 +1,22 @@
+# Dependencias del proyecto de tesis.
+# Instalar con: pip install -r requirements.txt
+
+pandas>=2.2
+numpy>=2.0
+scikit-learn>=1.6
+matplotlib>=3.9
+seaborn>=0.13
+scipy>=1.14
+joblib>=1.4
+
+# Modelos de boosting
+xgboost>=2.0
+lightgbm>=4.5
+
+# Explicabilidad y fairness
+shap>=0.51
+fairlearn>=0.11
+
+# Notebooks exploratorios
+jupyter>=1.0
+ipykernel>=6.29

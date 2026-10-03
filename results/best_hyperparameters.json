@@ -1,0 +1,21 @@
+{
+  "xgboost": {
+    "colsample_bytree": 0.821083466694282,
+    "gamma": 0.017534029078565914,
+    "learning_rate": 0.018587184947529513,
+    "max_depth": 6,
+    "n_estimators": 172,
+    "subsample": 0.8253640777765172
+  },
+  "lightgbm_dart": {
+    "colsample_bytree": 0.8903296816521719,
+    "drop_rate": 0.19820047415219547,
+    "learning_rate": 0.03354911309252297,
+    "max_depth": 5,
+    "n_estimators": 299,
+    "num_leaves": 19,
+    "skip_drop": 0.6342352920581454,
+    "subsample": 0.8659361578101404
+  },
+  "scale_pos_weight": 3.5209903121636166
+}

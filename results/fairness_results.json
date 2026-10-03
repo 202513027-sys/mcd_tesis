@@ -1,0 +1,24 @@
+{
+  "demographic_parity_difference": 0.03728788699486263,
+  "demographic_parity_ratio": 0.8973583815110787,
+  "equalized_odds_difference": 0.021752754111077133,
+  "equalized_odds_ratio": 0.9169075647927224,
+  "by_group": [
+    {
+      "sensitive_feature_0": "SEXO=1",
+      "selection_rate": 0.3632823365785814,
+      "accuracy": 0.7201668984700974,
+      "precision": 0.46018376722817766,
+      "recall": 0.6662971175166297,
+      "f1": 0.5443840579710145
+    },
+    {
+      "sensitive_feature_0": "SEXO=2",
+      "selection_rate": 0.32599444958371876,
+      "accuracy": 0.7411655874190565,
+      "precision": 0.4120317820658343,
+      "recall": 0.6666666666666666,
+      "f1": 0.5092949842160646
+    }
+  ]
+}

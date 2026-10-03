@@ -1,0 +1,90 @@
+# =====================================================================
+#  .gitignore - Proyecto de tesis (incumplimiento crediticio)
+# =====================================================================
+
+# ---------------------------------------------------------------------
+# DATOS: nunca subir datos (crudos ni procesados)
+# Se conserva solo la estructura de carpetas mediante .gitkeep
+# ---------------------------------------------------------------------
+data/**
+!data/**/
+!data/**/.gitkeep
+
+# Por si aparecen datos sueltos fuera de data/
+*.csv
+*.xlsx
+*.xls
+*.parquet
+*.feather
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+*.sav
+*.dta
+*.zip
+*.7z
+*.rar
+*.gz
+
+# Excepción: tablas de resultados (métricas, pruebas, SHAP) SÍ se suben
+!results/*.csv
+
+# ---------------------------------------------------------------------
+# MODELOS entrenados (binarios, regenerables con src/run_experiment.py)
+# ---------------------------------------------------------------------
+models/*
+!models/.gitkeep
+*.joblib
+
+# ---------------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+.conda/
+
+# Variables de entorno / credenciales
+.env
+.env.*
+*.key
+credentials*.json
+secrets*.json
+
+# ---------------------------------------------------------------------
+# Jupyter
+# ---------------------------------------------------------------------
+.ipynb_checkpoints/
+
+# ---------------------------------------------------------------------
+# Logs y temporales
+# ---------------------------------------------------------------------
+*.log
+logs/
+catboost_info/
+mlruns/
+tmp/
+*.tmp
+
+# ---------------------------------------------------------------------
+# Documentos de Word/Office abiertos (archivos de bloqueo)
+# ---------------------------------------------------------------------
+~$*
+
+# ---------------------------------------------------------------------
+# Sistema operativo / editores
+# ---------------------------------------------------------------------
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/
