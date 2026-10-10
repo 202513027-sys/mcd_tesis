@@ -54,7 +54,7 @@ thesis-project/
 - **Fuente**: `data/raw/DATA.csv` (30,000 clientes, 25 columnas, separador `;`).
   Corresponde a un dataset de comportamiento de pago de tarjeta de crédito
   (variables de línea de crédito, demográficas, e historial de pago/facturación
-  de 6 meses).
+  de 6 meses). Proviende de una entidad financiera peruana. 
 - **Target**: `Y` — binaria (`1` = incumplimiento de pago el mes siguiente).
   **Desbalanceada**: 77.9% clase 0 / 22.1% clase 1 (6,636 positivos).
 - **Identificador**: `ID` — único para las 30,000 filas, se excluye como
