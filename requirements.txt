@@ -1,21 +1,24 @@
-# Dependencias del proyecto de tesis.
+# Dependencias del proyecto de tesis (versiones fijadas).
+# Entorno de referencia: Google Colab, Python 3.12
+# Versiones tomadas de las salidas de Ejecuciones/Tesis.ipynb.
 # Instalar con: pip install -r requirements.txt
 
-pandas>=2.2
-numpy>=2.0
-scikit-learn>=1.6
-matplotlib>=3.9
-seaborn>=0.13
-scipy>=1.14
-joblib>=1.4
+pandas==2.2.2
+numpy==2.0.2
+scikit-learn==1.6.1
+scipy==1.16.3
+joblib==1.5.3
+statsmodels>=0.14        # PENDIENTE de fijar (se usa en Tesis.ipynb)
+matplotlib>=3.9          # PENDIENTE de fijar
+seaborn>=0.13            # PENDIENTE de fijar
 
 # Modelos de boosting
-xgboost>=2.0
-lightgbm>=4.5
+xgboost==3.3.0
+lightgbm==4.6.0
 
 # Explicabilidad y fairness
-shap>=0.51
-fairlearn>=0.11
+shap==0.52.0
+fairlearn>=0.11          # PENDIENTE de fijar
 
 # Notebooks exploratorios
 jupyter>=1.0
