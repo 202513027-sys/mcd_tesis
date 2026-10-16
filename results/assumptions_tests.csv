@@ -1,0 +1,13 @@
+prueba,metric,grupo,estadistico,p_value,decision
+Shapiro-Wilk,AUC,LogisticRegression - XGBoost,0.8994194565745041,0.21590146353541106,no se rechaza normalidad
+Shapiro-Wilk,AUC,LogisticRegression - LightGBM_DART,0.930314687140493,0.45099461477925945,no se rechaza normalidad
+Shapiro-Wilk,AUC,XGBoost - LightGBM_DART,0.9303867593088838,0.4517071664401844,no se rechaza normalidad
+Levene (mediana),AUC,LogisticRegression / XGBoost / LightGBM_DART,0.11033375073044857,0.8959368748577481,varianzas homogéneas
+Shapiro-Wilk,Sensitivity,LogisticRegression - XGBoost,0.9688053259345707,0.8795527301868382,no se rechaza normalidad
+Shapiro-Wilk,Sensitivity,LogisticRegression - LightGBM_DART,0.9575372957143202,0.757468328587918,no se rechaza normalidad
+Shapiro-Wilk,Sensitivity,XGBoost - LightGBM_DART,0.8688181830895751,0.09684198595526716,no se rechaza normalidad
+Levene (mediana),Sensitivity,LogisticRegression / XGBoost / LightGBM_DART,0.1422272681058711,0.8680696880855154,varianzas homogéneas
+Shapiro-Wilk,F1,LogisticRegression - XGBoost,0.9360198281031885,0.5096321375229886,no se rechaza normalidad
+Shapiro-Wilk,F1,LogisticRegression - LightGBM_DART,0.8558815965386868,0.06821956757792852,no se rechaza normalidad
+Shapiro-Wilk,F1,XGBoost - LightGBM_DART,0.9717106027798905,0.9062363615754246,no se rechaza normalidad
+Levene (mediana),F1,LogisticRegression / XGBoost / LightGBM_DART,0.1129806614767378,0.8935879477198543,varianzas homogéneas

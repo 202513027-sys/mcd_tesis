@@ -1,0 +1,23 @@
+{
+  "n_filas": 30000,
+  "n_columnas": 25,
+  "n_positivos_Y1": 6636,
+  "tasa_Y1": 0.2212,
+  "nulos_total": 0,
+  "ID_duplicados": 0,
+  "filas_duplicadas_con_ID": 0,
+  "filas_duplicadas_sin_ID": 35,
+  "filas_involucradas_en_duplicados_sin_ID": 70,
+  "filas_mismas_X_sin_ID_ni_Y": 56,
+  "EDUCACION_fuera_rango_1a4": {
+    "0": 14,
+    "5": 280,
+    "6": 51
+  },
+  "EDUCACION_fuera_rango_total": 345,
+  "ESTADO_CIVIL_fuera_rango_1a3": {
+    "0": 54
+  },
+  "ESTADO_CIVIL_fuera_rango_total": 54,
+  "filas_mismas_X_distinta_Y": 21
+}

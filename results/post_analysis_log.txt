@@ -1,0 +1,63 @@
+==============================================================================
+POST-ANÁLISIS ESTADÍSTICO (sobre results/, sin reentrenar)
+Fecha: 2026-10-16 15:17 | Python 3.14.7 | pandas 3.0.2 | numpy 2.4.4 | scipy 1.18.1 | statsmodels 0.15.0
+==============================================================================
+
+[1] CALIDAD DE DATOS (archivo crudo)
+    Filas: 30000 | Columnas: 25 | Nulos: 0 | ID duplicados: 0
+    Morosos (Y=1): 6636 (22.12%)
+    Filas duplicadas contando ID: 0
+    Filas duplicadas SIN contar ID (copias adicionales): 35 (70 filas involucradas)
+    Filas con las mismas X (sin ID ni Y): 56 -> de ellas con Y distinta: 21
+    EDUCACION fuera de 1-4: {'0': 14, '5': 280, '6': 51} = 345 filas
+    ESTADO_CIVIL fuera de 1-3: {'0': 54} = 54 filas
+
+[2] TABLA 5 — media ± DE de las 10 corridas (run_id >= 0, sin el split oficial)
+    Corridas: 10 | semillas 1234..1243
+    Nota: la corrida con semilla 1234 usa la misma partición que el split oficial.
+    LogisticRegression   AUC = 0.7400 ± 0.0056 (n=10) | split oficial 0.7430
+    XGBoost              AUC = 0.7861 ± 0.0046 (n=10) | split oficial 0.7827
+    LightGBM_DART        AUC = 0.7868 ± 0.0045 (n=10) | split oficial 0.7833
+
+[3] FRIEDMAN + W DE KENDALL + HOLM (familia: 3 métricas)
+    AUC          chi2=15.80  p=3.71e-04  p_Holm=7.41e-04  W de Kendall=0.790  -> rechaza H0
+    Sensitivity  chi2=13.40  p=1.23e-03  p_Holm=1.23e-03  W de Kendall=0.670  -> rechaza H0
+    F1           chi2=18.20  p=1.12e-04  p_Holm=3.35e-04  W de Kendall=0.910  -> rechaza H0
+
+[4] SUPUESTOS — Shapiro-Wilk sobre diferencias pareadas (10 corridas) y Levene
+    Shapiro-Wilk     AUC          LogisticRegression - XGBoost                            est=0.899  p=0.216 -> no se rechaza normalidad
+    Shapiro-Wilk     AUC          LogisticRegression - LightGBM_DART                      est=0.930  p=0.451 -> no se rechaza normalidad
+    Shapiro-Wilk     AUC          XGBoost - LightGBM_DART                                 est=0.930  p=0.452 -> no se rechaza normalidad
+    Levene (mediana) AUC          LogisticRegression / XGBoost / LightGBM_DART            est=0.110  p=0.896 -> varianzas homogéneas
+    Shapiro-Wilk     Sensitivity  LogisticRegression - XGBoost                            est=0.969  p=0.880 -> no se rechaza normalidad
+    Shapiro-Wilk     Sensitivity  LogisticRegression - LightGBM_DART                      est=0.958  p=0.757 -> no se rechaza normalidad
+    Shapiro-Wilk     Sensitivity  XGBoost - LightGBM_DART                                 est=0.869  p=0.097 -> no se rechaza normalidad
+    Levene (mediana) Sensitivity  LogisticRegression / XGBoost / LightGBM_DART            est=0.142  p=0.868 -> varianzas homogéneas
+    Shapiro-Wilk     F1           LogisticRegression - XGBoost                            est=0.936  p=0.510 -> no se rechaza normalidad
+    Shapiro-Wilk     F1           LogisticRegression - LightGBM_DART                      est=0.856  p=0.068 -> no se rechaza normalidad
+    Shapiro-Wilk     F1           XGBoost - LightGBM_DART                                 est=0.972  p=0.906 -> no se rechaza normalidad
+    Levene (mediana) F1           LogisticRegression / XGBoost / LightGBM_DART            est=0.113  p=0.894 -> varianzas homogéneas
+    Decisión: Shapiro-Wilk no rechaza normalidad en ningún par; se mantiene Friedman (no paramétrico), que no exige normalidad y es robusto con n = 10.
+
+[5] WILCOXON PAREADO POR PARES (corridas) + HOLM dentro de cada métrica (3 pares)
+    AUC          LogisticRegression vs XGBoost        dif=-0.0461 (gana 0/10)  p=0.0020  p_Holm=0.0059
+    AUC          LogisticRegression vs LightGBM_DART  dif=-0.0468 (gana 0/10)  p=0.0020  p_Holm=0.0059
+    AUC          XGBoost            vs LightGBM_DART  dif=-0.0007 (gana 3/10)  p=0.0371  p_Holm=0.0371
+    Sensitivity  LogisticRegression vs XGBoost        dif=-0.0684 (gana 0/10)  p=0.0020  p_Holm=0.0059
+    Sensitivity  LogisticRegression vs LightGBM_DART  dif=-0.0555 (gana 1/10)  p=0.0039  p_Holm=0.0078
+    Sensitivity  XGBoost            vs LightGBM_DART  dif=+0.0128 (gana 7/10)  p=0.1934  p_Holm=0.1934
+    F1           LogisticRegression vs XGBoost        dif=-0.0232 (gana 0/10)  p=0.0020  p_Holm=0.0059
+    F1           LogisticRegression vs LightGBM_DART  dif=-0.0295 (gana 0/10)  p=0.0020  p_Holm=0.0059
+    F1           XGBoost            vs LightGBM_DART  dif=-0.0063 (gana 1/10)  p=0.0137  p_Holm=0.0137
+
+[6] DeLONG POR PARES (split oficial, HE2) + HOLM + IC 95 % + morosos
+    Morosos en el test oficial: 1991 (1 punto de Recall = 19.9 morosos)
+    LogisticRegression vs XGBoost        dif AUC=-0.0397 IC95 [-0.0488, -0.0306]  p=1.58e-17  p_Holm=3.17e-17  IC dentro de ±0.01: no
+        dif AUC media corridas=-0.04611 | dif Recall oficial=-0.0904 (≈ -180.0 morosos) | media corridas=-0.0684 (≈ -136.1 morosos)
+    LogisticRegression vs LightGBM_DART  dif AUC=-0.0403 IC95 [-0.0494, -0.0313]  p=2.08e-18  p_Holm=6.25e-18  IC dentro de ±0.01: no
+        dif AUC media corridas=-0.04677 | dif Recall oficial=-0.0678 (≈ -135.0 morosos) | media corridas=-0.0555 (≈ -110.6 morosos)
+    XGBoost            vs LightGBM_DART  dif AUC=-0.0006 IC95 [-0.0025, +0.0013]  p=5.10e-01  p_Holm=5.10e-01  IC dentro de ±0.01: sí
+        dif AUC media corridas=-0.00066 | dif Recall oficial=+0.0226 (≈ +45.0 morosos) | media corridas=+0.0128 (≈ +25.5 morosos)
+
+Nota: las 10 corridas son un hold-out repetido con particiones que se solapan; esto vuelve optimistas a Friedman/Wilcoxon. La cifra principal es el AUC del split oficial con su IC 95 % de DeLong.
+Archivos guardados en results/: data_quality.json, table5_runs.csv, friedman_kendall_holm.csv, assumptions_tests.csv, pairwise_wilcoxon_holm.csv, delong_pairs_holm.csv, post_analysis_log.txt
