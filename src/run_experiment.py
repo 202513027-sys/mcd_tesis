@@ -670,4 +670,17 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # Todo lo que imprime la corrida queda también en results/run_log.txt
+    import post_analysis
+
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    _tee = post_analysis.Tee(RESULTS_DIR / "run_log.txt")
+    sys.stdout = _tee
+    try:
+        main()
+        # Post-análisis: calidad de datos, Tabla 5 (10 corridas), W de Kendall,
+        # Shapiro-Wilk/Levene, Holm y DeLong con IC y morosos (ver post_analysis.py)
+        post_analysis.main()
+    finally:
+        sys.stdout = _tee.stdout
+        _tee.close()
