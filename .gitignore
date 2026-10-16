@@ -9,6 +9,7 @@
 data/**
 !data/**/
 !data/**/.gitkeep
+!data/README.md
 
 # Por si aparecen datos sueltos fuera de data/
 *.csv

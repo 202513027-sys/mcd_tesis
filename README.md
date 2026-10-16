@@ -57,10 +57,17 @@ thesis-project/
 
 ## 3. Datos
 
-- **Fuente**: `data/raw/DATA.csv` (30,000 clientes, 25 columnas, separador `;`).
-  Corresponde a un dataset de comportamiento de pago de tarjeta de crédito
-  (variables de línea de crédito, demográficas, e historial de pago/facturación
-  de 6 meses). Proviende de una entidad financiera peruana. 
+- **Fuente**: conjunto **público** *Default of Credit Card Clients* (Yeh, 2009),
+  UCI Machine Learning Repository, DOI [10.24432/C55S3H](https://doi.org/10.24432/C55S3H),
+  licencia CC BY 4.0. Clientes de tarjeta de crédito de un banco de **Taiwán**,
+  historial de abril a septiembre de 2005; montos en dólares taiwaneses (NT$).
+  Usado también por Yeh y Lien (2009). Detalle, enlace de descarga, checksum y
+  correspondencia de columnas en [`data/README.md`](data/README.md).
+- **Archivo**: `data/raw/DATA.csv` (30,000 clientes, 25 columnas, separador `;`),
+  mismo contenido que el original de UCI con las columnas renombradas al español.
+  No se versiona en el repositorio; se descarga del enlace indicado.
+- **Validez**: los resultados valen para esa población (Taiwán, 2005). No se
+  generalizan a la banca peruana ni a periodos actuales sin validación externa.
 - **Target**: `Y` — binaria (`1` = incumplimiento de pago el mes siguiente).
   **Desbalanceada**: 77.9% clase 0 / 22.1% clase 1 (6,636 positivos).
 - **Identificador**: `ID` — único para las 30,000 filas, se excluye como
