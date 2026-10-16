@@ -80,7 +80,7 @@ def load_data(path: str | Path, sep: str = ";") -> pd.DataFrame:
 def clean_anomalous_categories(df: pd.DataFrame) -> pd.DataFrame:
     """Agrupa categorías no documentadas de EDUCACION y ESTADO_CIVIL en 'otros'.
 
-    EDUCACION: valores documentados 1-4; se observan además 0, 5 y 6 (417 filas).
+    EDUCACION: valores documentados 1-4; se observan además 0, 5 y 6 (345 filas: 14 + 280 + 51).
     ESTADO_CIVIL: valores documentados 1-3; se observa además 0 (54 filas).
 
     Esta limpieza es determinística (no aprende nada de los datos) por lo que es

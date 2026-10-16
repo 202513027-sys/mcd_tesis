@@ -32,7 +32,8 @@ thesis-project/
 │   └── 01_eda.ipynb         # análisis exploratorio (no contiene el pipeline)
 ├── src/
 │   ├── utils.py             # funciones reutilizables (métricas, plots, SHAP, Fairlearn...)
-│   └── run_experiment.py    # pipeline experimental completo (punto de entrada único)
+│   ├── run_experiment.py    # pipeline experimental completo (punto de entrada único)
+│   └── post_analysis.py     # post-análisis estadístico sobre results/ (no reentrena)
 ├── models/                  # modelos entrenados (.joblib)
 ├── results/
 │   ├── metrics.csv          # métricas tidy de todas las corridas
@@ -42,6 +43,11 @@ thesis-project/
 │   ├── shap_feature_selection.csv
 │   ├── shap_importance_final_model.csv
 │   ├── run_summary.json
+│   ├── table5_runs.csv      # Tabla 5: media ± DE de las 10 corridas (sin split oficial)
+│   ├── data_quality.json    # duplicados y categorías fuera de rango
+│   ├── friedman_kendall_holm.csv, pairwise_wilcoxon_holm.csv,
+│   │   assumptions_tests.csv, delong_pairs_holm.csv   # post-análisis (S5)
+│   ├── run_log.txt, post_analysis_log.txt             # salida impresa de cada script
 │   └── figures/              # 12 figuras (ver sección Resultados)
 ├── requirements.txt
 └── README.md
@@ -68,9 +74,13 @@ thesis-project/
 
 ### Preprocessing y limpieza
 
-- **Sin nulos, sin filas duplicadas, sin `ID` duplicado** (verificado en `notebooks/01_eda.ipynb`).
+- **Sin nulos y sin `ID` duplicado.** Contando la columna `ID` no hay filas
+  duplicadas; **sin contar `ID` hay 35 filas que repiten exactamente a otra**
+  (70 filas involucradas) y 21 pares adicionales con las mismas variables pero
+  distinta `Y`. Se conservan (no se eliminan). Conteo impreso por
+  `src/post_analysis.py` y guardado en `results/data_quality.json`.
 - **Categorías anómalas documentadas, no eliminadas**: `EDUCACION` tiene
-  categorías 0, 5 y 6 (417 filas) fuera del rango documentado (1-4);
+  categorías 0, 5 y 6 (345 filas: 14 + 280 + 51) fuera del rango documentado (1-4);
   `ESTADO_CIVIL` tiene categoría 0 (54 filas) fuera de rango (1-3). Se
   agrupan de forma determinística en la categoría más cercana/"otros"
   (`utils.clean_anomalous_categories`), una transformación fila a fila que
@@ -266,14 +276,19 @@ El modelo final se selecciona automáticamente como el de mayor AUC en test
 entre los dos candidatos de boosting — en esta ejecución, **LightGBM-DART**
 (diferencia con XGBoost muy pequeña, ~0.0006 AUC).
 
-### 5.2 Estabilidad entre las 10 corridas (`results/metrics_summary.csv`, test)
+### 5.2 Estabilidad entre las 10 corridas (`results/table5_runs.csv`, test)
 
 | Modelo | AUC (mean ± std) | GINI | KS | F1 |
 |---|---|---|---|---|
 | Dummy | 0.5000 ± 0.0000 | 0.0000 ± 0.0000 | 0.0000 ± 0.0000 | 0.0000 ± 0.0000 |
-| Regresión Logística | 0.7403 ± 0.0054 | 0.4806 ± 0.0108 | 0.3851 ± 0.0082 | 0.5058 ± 0.0071 |
-| XGBoost | 0.7858 ± 0.0045 | 0.5716 ± 0.0090 | 0.4316 ± 0.0110 | 0.5273 ± 0.0099 |
-| LightGBM-DART | 0.7865 ± 0.0044 | 0.5729 ± 0.0089 | 0.4335 ± 0.0087 | 0.5343 ± 0.0088 |
+| Regresión Logística | 0.7400 ± 0.0056 | 0.4800 ± 0.0113 | 0.3848 ± 0.0086 | 0.5058 ± 0.0075 |
+| XGBoost | 0.7861 ± 0.0046 | 0.5722 ± 0.0093 | 0.4329 ± 0.0105 | 0.5289 ± 0.0088 |
+| LightGBM-DART | 0.7868 ± 0.0045 | 0.5735 ± 0.0091 | 0.4343 ± 0.0088 | 0.5353 ± 0.0086 |
+
+Media ± DE de las **10 corridas** (`run_id` 0-9, semillas 1234-1243). No incluye
+el split oficial (`run_id = -1`), que sí estaba promediado en
+`metrics_summary.csv` (11 filas). La corrida 0 usa la misma semilla (1234) y
+por tanto la misma partición que el split oficial.
 
 Ambos modelos de boosting son consistentemente superiores al baseline
 logístico (~4-5 puntos de AUC), con desviaciones estándar bajas (< 0.005 en
@@ -372,6 +387,15 @@ Esto genera (o regenera, de forma reproducible):
 - `results/*.json`, `results/*.csv` (hiperparámetros, fairness, SHAP)
 - `results/hypothesis_summary.csv`, `results/hypothesis_tests.json`, `results/delong_tests.csv` (contraste de hipótesis)
 - `results/figures/*.png` (13 figuras)
+- `results/run_log.txt` (todo lo que imprime la corrida)
+- Post-análisis (`src/post_analysis.py`, se llama al final automáticamente y
+  también se puede correr solo con `python src/post_analysis.py`, sin reentrenar):
+  `results/data_quality.json`, `results/table5_runs.csv`,
+  `results/friedman_kendall_holm.csv` (Friedman + W de Kendall + Holm),
+  `results/assumptions_tests.csv` (Shapiro-Wilk y Levene),
+  `results/pairwise_wilcoxon_holm.csv`, `results/delong_pairs_holm.csv`
+  (IC 95 % de DeLong, Holm, equivalencia ±0,01 y morosos adicionales) y
+  `results/post_analysis_log.txt`
 - `models/*.joblib` (los 4 modelos oficiales, listos para cargar con `joblib.load`)
 
 Tiempo de ejecución aproximado: **6-12 minutos** en una máquina de 2 núcleos.
